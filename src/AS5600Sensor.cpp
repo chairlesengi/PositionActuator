@@ -1,14 +1,14 @@
 #include "AS5600Sensor.h"
 
-AS5600Sensor::AS5600Sensor(TwoWire& wire): _interface(wire){
-    _angle = 0.0f;
-    _rotations = 0;
-    _offset = 0.0f;
-    _lastCounts = 0;
+AS5600Sensor::AS5600Sensor(TwoWire& wire): interface_(wire){
+    angle_ = 0.0f;
+    rotations_ = 0;
+    offset_ = 0.0f;
+    lastCounts_ = 0;
 }
 
 bool AS5600Sensor::begin(){
-    if(!as5600.begin(AS5600_DEFAULT_ADDR, &_interface)){
+    if(!as5600.begin(AS5600_DEFAULT_ADDR, &interface_)){
         return false;
     }
     //setup from example code from this library
@@ -25,29 +25,29 @@ bool AS5600Sensor::begin(){
     as5600.setZPosition(0);
     as5600.setMPosition(4095);
     as5600.setMaxAngle(4095);
-    _lastCounts = 0;
+    lastCounts_ = 0;
     return true;
 }
 
 void AS5600Sensor::update(){
     uint16_t currentCounts = as5600.getRawAngle();
-    uint16_t dCounts = currentCounts-_lastCounts;
-    _angle = Helper::convertFrom12bit(currentCounts);
-    if(dCounts < -2048){_rotations++;} //cross from 4095 to 10 for example
-    else if(dCounts > 2048){_rotations--;} //cross from 10 to 4095
-    _lastCounts = currentCounts;
+    int16_t dCounts = currentCounts-lastCounts_;
+    angle_ = Helper::convertFrom12bit(currentCounts);
+    if(dCounts < -2048){rotations_++;} //cross from 4095 to 10 for example
+    else if(dCounts > 2048){rotations_--;} //cross from 10 to 4095
+    lastCounts_ = currentCounts;
 }   
 
 void AS5600Sensor::reset(){
-    _rotations = 0;
-    _offset = 0.0f;
-    _lastCounts = as5600.getRawAngle();
+    rotations_ = 0;
+    offset_ = 0.0f;
+    lastCounts_ = as5600.getRawAngle();
 }
 
 float AS5600Sensor::readAngle(){
-    return (_angle+(2*PI*_rotations)+_offset);
+    return (angle_+(2*PI*rotations_)+offset_);
 }
 
 void AS5600Sensor::setOffset(float offset){
-    _offset = offset;
+    offset_ = offset;
 }

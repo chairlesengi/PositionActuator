@@ -5,7 +5,7 @@
 
 class Actuator{
     private:
-        float _position;
+        float _position = 0.0f;
         float _target;
         float _home;
         float _ratio;

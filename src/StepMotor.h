@@ -5,9 +5,11 @@
 
 class StepMotor : public Motor{
     private:
-        AccelStepper stepper;
+        AccelStepper stepper_;
+        uint16_t stepsRev_;
     public: 
-        explicit StepMotor(int stepPin, int dirPin);
+        explicit StepMotor(uint8_t stepPin, uint8_t dirPin, uint16_t stepsRev);
+        explicit StepMotor(uint8_t stepPin, uint8_t dirPin, uint16_t stepsRev, float speed, float accel);
         bool begin() override; //inits motor (with pre given parameters like pin, whatever defined by subclass)
         void setAccel(float accel) override; //sets acceleration of motor in rad/s
         void setSpeed(float speed) override; //sets target speed of motor in rad/s
