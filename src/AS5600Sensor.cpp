@@ -1,6 +1,6 @@
 #include "AS5600Sensor.h"
 
-AS5600Sensor::AS5600Sensor(){
+AS5600Sensor::AS5600Sensor(TwoWire& wire): _interface(wire){
     _angle = 0.0f;
     _rotations = 0;
     _offset = 0.0f;
@@ -8,7 +8,7 @@ AS5600Sensor::AS5600Sensor(){
 }
 
 bool AS5600Sensor::begin(){
-    if(!as5600.begin()){
+    if(!as5600.begin(AS5600_DEFAULT_ADDR, &_interface)){
         return false;
     }
     //setup from example code from this library

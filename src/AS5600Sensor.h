@@ -7,6 +7,7 @@ class AS5600Sensor : public AngleSensor{
     private:
         float _angle; //monitors angle of sensor absolutely
         float _offset; //offset within a rotation of the angle
+        TwoWire& _interface;
         int16_t _rotations; //monitors rotations of sensor
         uint16_t _lastCounts;
         Adafruit_AS5600 as5600;
